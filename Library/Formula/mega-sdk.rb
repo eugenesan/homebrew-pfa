@@ -3,8 +3,8 @@ require 'formula'
 class MegaSdk < Formula
   homepage 'http://mega.co.nz'
   url 'https://mega.co.nz/sdk.zip'
-  version '20130928'
-  sha1 '8e2cd6391e6a166cf6c9700ac4c0b54a55900d98'
+  version '20131003'
+  sha1 'bd6aa846160631dfc4e8684000b41d087b36b46d'
 
   depends_on 'berkeley-db'
   depends_on 'cryptopp'
