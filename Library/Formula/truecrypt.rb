@@ -14,31 +14,36 @@ class Truecrypt < Formula
   end
 
   conflicts_with 'fuse4x'
+
   depends_on 'pkg-config' => :build
   depends_on 'nasm' => :build
   depends_on 'wxmac'
   depends_on 'osxfuse'
 
-  # since upstream do not provide issues/code trackig,
+  # since upstream do not provide issues/code tracking,
   # changes were reported upstream using following form:
   # http://www.truecrypt.org/contact-forms/msg?t=1001
-
-  # embedded patch reflects changes in wx
-  def patches; DATA; end
+  def patches
+    # Reflect changes in wxmac
+    patches = {
+      :p1 => DATA,
+    }
+  end
 
   def install
     (buildpath/'Pkcs').install resource('Pkcs')
-    ENV['PKCS11_INC'] = (buildpath/'Pkcs')
+    ENV['PKCS11_INC'] = buildpath/'Pkcs'
 
     # generic osx adaptations
     inreplace "Makefile", "TC_OSX_SDK ?= /Developer/SDKs/MacOSX10.4u.sdk", "AS := nasm"
     inreplace "Makefile", "CC := gcc-4.0", "CC := gcc"
     inreplace "Makefile", "CXX := g++-4.0", "CXX := g++"
-    inreplace "Makefile", "C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_MACOSX -mmacosx-version-min=10.4 -isysroot $(TC_OSX_SDK)", "C_CXX_FLAGS += -D_XOPEN_SOURCE -DTC_UNIX -DTC_BSD -DTC_MACOSX -I./../Pkcs11"
+    inreplace "Makefile", "C_CXX_FLAGS += -DTC_UNIX -DTC_BSD -DTC_MACOSX -mmacosx-version-min=10.4 -isysroot $(TC_OSX_SDK)", "C_CXX_FLAGS += -D_XOPEN_SOURCE -DTC_UNIX -DTC_BSD -DTC_MACOSX -I#{buildpath}/Pkcs"
     inreplace "Makefile", "\tLFLAGS += -mmacosx-version-min=10.4 -Wl,-syslibroot $(TC_OSX_SDK)\n", ""
     inreplace "Makefile", "\tWX_CONFIGURE_FLAGS += --with-macosx-version-min=10.4 --with-macosx-sdk=$(TC_OSX_SDK)\n", ""
     inreplace "Main/FatalErrorHandler.cpp", "include <i386/ucontext.h>", "include <sys/ucontext.h>"
     inreplace "Main/FatalErrorHandler.cpp", "context->uc_mcontext->ss.", "context->uc_mcontext->__ss.__"
+    inreplace "Main/Main.make", "WX_CONFIG_LIBS := base\n", "WX_CONFIG_LIBS := base,core\n"
 
     # fix 64-bit support
     inreplace "Makefile", "ARCH = $(shell uname -p)", "ARCH = $(shell uname -m)"
@@ -56,29 +61,14 @@ class Truecrypt < Formula
     inreplace "Volume/EncryptionThreadPool.cpp", "fragmentData += unitsPerFragment * ENCRYPTION_DATA_UNIT_SIZE;", "fragmentData += unitsPerFragment * sectorSize;"
     inreplace "Volume/VolumeHeader.cpp", "#if !(defined (TC_WINDOWS) || defined (TC_LINUX))", "#if !(defined (TC_WINDOWS) || defined (TC_LINUX) || defined (TC_MACOSX))"
 
-    # build and install command line version
-    system 'make', 'NOGUI=1'
-    bin.install 'Main/TrueCrypt' => "truecrypt"
-
     # build and install gui version
-    system 'make clean'
-    system 'make'
+    system "make"
     prefix.install 'Main/TrueCrypt.app'
 
-    doc.install 'License.txt' => "LICENSE"
-    doc.install 'Readme.txt' => "README"
-  end
-
-  def caveats; <<-EOS.undent
-    1) command-line application 'truecrypt' installed to #{bin}
-    2) gui application TrueCrypt.app installed to #{prefix}
-       To link the application to a normal Mac OS X location:
-       $ brew linkapps
-       or:
-       $ ln -s #{prefix}/TrueCrypt.app /Applications
-
-       If you encounter an osxfuse error, be sure to consult osxfuse formula caveats
-    EOS
+    # build and install command line version
+    system 'make clean'
+    system 'make', 'NOGUI=1'
+    bin.install 'Main/TrueCrypt' => "truecrypt"
   end
 
   def test
