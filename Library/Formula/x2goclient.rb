@@ -2,8 +2,8 @@ require 'formula'
 
 class X2goclient < Formula
   homepage 'http://www.x2go.org'
-  url 'http://code.x2go.org/releases/source/x2goclient/x2goclient-4.0.1.2.tar.gz'
-  sha1 'ac8caf1b758ca772657de9b8d76e1a3c2e51a1c1'
+  url 'http://code.x2go.org/releases/source/x2goclient/x2goclient-4.0.1.3.tar.gz'
+  sha1 '37b946b5b6d0a072a6d1fee98ae43bef929f2abd'
 
   depends_on :x11
   depends_on :libpng
