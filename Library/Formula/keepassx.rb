@@ -6,7 +6,6 @@ class Keepassx < Formula
   sha1 'd25ecc9d3caaa5a6d0f39a42c730a95997f37e2e'
 
   depends_on 'qt'
-  depends_on 'zlib'
   depends_on 'librsvg'
 
   def install
@@ -16,15 +15,5 @@ class Keepassx < Formula
     # Simple Qt4 build
     system "qmake", "CONFIG-=app_bundle", "PREFIX=#{prefix}"
     system "make", "install"
-  end
-
-  def caveats; <<-EOS
-    #{name}.app was installed in:
-    #{prefix}
-    To symlink into ~/Applications, you can do:
-      brew linkapps
-    or
-      sudo ln -s #{prefix}/#{name}.app /Applications
-    EOS
   end
 end
