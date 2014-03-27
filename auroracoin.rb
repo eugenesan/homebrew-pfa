@@ -1,0 +1,1 @@
+Library/Formula/auroracoin.rb
