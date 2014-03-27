@@ -2,9 +2,9 @@ require "formula"
 
 class Zbackup < Formula
   homepage "http://zbackup.org"
-  url "https://github.com/eugenesan/zbackup.git", :commit => "1e8e941c6c0bb9377405dd78cd08f4d169564a81"
+  url "https://github.com/eugenesan/zbackup.git", :commit => "9e13d6b696cb68ba522b3e0841d106f2d8b5d047"
   version "1.3"
-  head "https://github.com/eugenesan/zbackup,git", :branch => "master"
+  head "https://github.com/eugenesan/zbackup.git", :branch => "master"
 
   option "with-brewed-openssl", "Build with Homebrew OpenSSL instead of the system version"
 
