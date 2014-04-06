@@ -6,7 +6,6 @@ class Keepassx < Formula
   sha1 'd25ecc9d3caaa5a6d0f39a42c730a95997f37e2e'
 
   depends_on 'qt'
-  depends_on 'librsvg'
 
   def install
     # Fix build on OSX 10.9
