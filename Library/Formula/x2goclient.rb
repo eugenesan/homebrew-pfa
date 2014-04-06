@@ -4,6 +4,7 @@ class X2goclient < Formula
   homepage 'http://www.x2go.org'
   url 'http://code.x2go.org/releases/source/x2goclient/x2goclient-4.0.1.3.tar.gz'
   sha1 '37b946b5b6d0a072a6d1fee98ae43bef929f2abd'
+  head 'http://code.x2go.org/git/x2goclient.git'
 
   depends_on :x11
   depends_on :libpng
