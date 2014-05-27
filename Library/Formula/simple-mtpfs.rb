@@ -2,8 +2,8 @@ require 'formula'
 
 class SimpleMtpfs < Formula
   homepage 'http://github.com/phatina/simple-mtpfs'
-  url 'https://github.com/phatina/simple-mtpfs/archive/simple-mtpfs-0.1.tar.gz'
-  sha1 'b59670d21f2ed0e43db280d7378d6657060f0104'
+  url 'https://github.com/phatina/simple-mtpfs/archive/simple-mtpfs-0.2.tar.gz'
+  sha1 '0fa3e2d950aeb633c741af8ae2b3ec0f6efdda71'
   head 'https://github.com/phatina/simple-mtpfs.git', :branch => 'master'
 
   depends_on :autoconf
