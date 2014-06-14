@@ -1,7 +1,7 @@
 class PopcornTime < Cask
-  url 'http://cdn.get-popcorn.com/build/Popcorn-Time-0.3.0-Mac.tar.gz'
-  homepage 'http://get-popcorn.com/'
-  version '0.3.0'
-  sha256 '8f0f76fc3dccbccbfd433b7ca363c87ca6ab4515f3a3e39f6f08f402f654ae2e'
+  url 'https://github.com/popcorn-official/popcorn-app/releases/download/v0.3.2/Popcorn-Time-0.3.2-Mac.dmg'
+  homepage 'http://popcorntime.io/'
+  version '0.3.2'
+  sha256 'abeea0d1de945311d1552764a9842142c8d317ba7ea0b01c15d45f4bdd815206'
   link 'Popcorn-Time.app'
 end
