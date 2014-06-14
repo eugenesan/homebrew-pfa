@@ -1,15 +1,15 @@
 require "formula"
 
 class RadiantPlayer < Formula
-  homepage "https://github.com/kbhomes/google-music-mac"
-  url "https://github.com/kbhomes/google-music-mac/archive/v1.1.3.tar.gz"
-  sha1 "9c962efeaec17804b134865e3785322ebe37c9ee"
+  homepage "http://kbhomes.github.io/radiant-player-mac/"
+  url "https://github.com/kbhomes/radiant-player-mac/archive/v1.2.0.tar.gz"
+  sha1 "af90c8c54daace91d5886449982cbd325fd7018e"
 
   depends_on :xcode
 
   def install
     # Fix CasE SeNsItIvItY!
-    inreplace "google-music-mac/LastFm/LastFmPopover.h", "LastFM", "LastFm"
+    inreplace "radiant-player-mac/LastFm/LastFmPopover.h", "LastFM", "LastFm"
 
     # Build embedded Pods project as dependency
     cd "Pods" do
