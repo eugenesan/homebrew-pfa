@@ -2,9 +2,9 @@ require 'formula'
 
 class Nxcomp < Formula
   homepage 'http://www.nomachine.com/sources.php'
-  url 'http://code.x2go.org/releases/source/nx-libs/nx-libs-3.5.0.24-lite.tar.gz'
-  sha1 '0eea84b63dc0181fb4312aa41ee77168a1bdf7c9'
-  version '3.5.0.24-lite'
+  url 'http://code.x2go.org/releases/source/nx-libs/nx-libs-3.5.0.27-lite.tar.gz'
+  sha1 '2ed9c711148e618b4af59daa529bc0bf7c62622d'
+  version '3.5.0.27-lite'
 
   depends_on :autoconf
   depends_on :automake
