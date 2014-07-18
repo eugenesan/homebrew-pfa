@@ -2,8 +2,8 @@ require "formula"
 
 class RadiantPlayer < Formula
   homepage "http://kbhomes.github.io/radiant-player-mac/"
-  url "https://github.com/kbhomes/radiant-player-mac/archive/v1.2.0.tar.gz"
-  sha1 "af90c8c54daace91d5886449982cbd325fd7018e"
+  url "https://github.com/kbhomes/radiant-player-mac/archive/v1.2.1.tar.gz"
+  sha1 "e1665a94a3b8892926591e53b8103e49e6d9bc8e"
 
   depends_on :xcode
 
