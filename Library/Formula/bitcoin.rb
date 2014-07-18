@@ -2,9 +2,10 @@ require "formula"
 
 class Bitcoin < Formula
   homepage "http://bitcoin.org/"
-  url "https://github.com/bitcoin/bitcoin.git", :tag => "v0.9.0"
-  version "0.9.0"
+  url "https://github.com/bitcoin/bitcoin/archive/v0.9.2.1.tar.gz"
+  version "0.9.2.1"
   head "https://github.com/bitcoin/bitcoin.git", :branch => "master"
+  sha1 "cb7b322a84ce19dc76fa240d45764f7cd73ee7fe"
 
   option "without-upnp", "Disable uPNP port forwarding"
   option "without-qrc", "Disable QR codes"
