@@ -2,9 +2,9 @@ require 'formula'
 
 class MegaSdk < Formula
   homepage 'http://mega.co.nz'
-  url 'https://github.com/meganz/sdk2/archive/92d2fc2e4e.zip'
-  version '2.0.0'
-  sha1 'aa566b8e1774325c8a4c04808b1eea36d65a0427'
+  url 'https://github.com/meganz/sdk2/archive/ae461b886b60eec8eddc7237dd492c854c65ca13.tar.gz'
+  version '2.1.0'
+  sha1 'f1337df03cc56b3eb0f149c05f65a0a50a882896'
 
   depends_on :autoconf
   depends_on :automake
