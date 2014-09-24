@@ -5,6 +5,7 @@ class Nxcomp < Formula
   url 'http://code.x2go.org/releases/source/nx-libs/nx-libs-3.5.0.27-lite.tar.gz'
   sha1 '2ed9c711148e618b4af59daa529bc0bf7c62622d'
   version '3.5.0.27-lite'
+  head 'http://code.x2go.org/git/nx-libs.git'
 
   depends_on :autoconf
   depends_on :automake
@@ -18,6 +19,16 @@ class Nxcomp < Formula
   def install
     # Build lib
     cd "nxcomp" do
+      inreplace "configure.in", "=/usr/bin/makedepend", "=$(which makedepend)"
+      inreplace "configure.in", "LDFLAGS -bundle", "LDFLAGS -dynamiclib"
+      inreplace "Makefile.in", "libXcomp.so.3", "$(LIBLOAD)"
+      inreplace "Makefile.in", "libXcomp.so", "$(LIBSHARED)"
+      inreplace "Makefile.in", "libXcomp.a", "$(LIBARCHIVE)"
+      inreplace "Makefile.in", ".so.$(VERSION)", "$(VERSION).dylib"
+      inreplace "Makefile.in", ".so.$(LIBVERSION)", "$(LIBVERSION).dylib"
+      inreplace "Makefile.in", ".so", ".dylib"
+      inreplace "Makefile.in", "$(LDFLAGS) $(CXXOBJ) $(COBJ) $(LIBS)", "-install_name $(libdir)/nx/$@ -compatibility_version $(LIBVERSION) -current_version $(LIBVERSION) $(LDFLAGS) $(CXXOBJ) $(COBJ) $(LIBS)"
+
       # Configure
       system "autoreconf", "--force", "--install"
       system "./configure", "--prefix=#{prefix}"
@@ -28,6 +39,8 @@ class Nxcomp < Formula
 
     # Build binary
     cd "nxproxy" do
+      inreplace "configure.in", "=makedepend", "=$(which makedepend)"
+
       # Link with lib
       ENV.append 'LDFLAGS', "-L#{lib}/nx"
 
@@ -42,98 +55,6 @@ class Nxcomp < Formula
 end
 
 __END__
---- a/nxcomp/Makefile.in
-+++ b/nxcomp/Makefile.in
-@@ -91,9 +91,9 @@
- LIBRARY = Xcomp
- 
- LIBNAME    = lib$(LIBRARY)
--LIBFULL    = lib$(LIBRARY).so.$(VERSION)
--LIBLOAD    = lib$(LIBRARY).so.$(LIBVERSION)
--LIBSHARED  = lib$(LIBRARY).so
-+LIBFULL    = lib$(LIBRARY)$(VERSION).dylib
-+LIBLOAD    = lib$(LIBRARY)$(LIBVERSION).dylib
-+LIBSHARED  = lib$(LIBRARY).dylib
- LIBARCHIVE = lib$(LIBRARY).a
- 
- LIBCYGSHARED  = cyg$(LIBRARY).dll
-@@ -231,7 +231,11 @@
- CXXOBJ = $(CXXSRC:.cpp=.o)
- 
- $(LIBFULL):	 $(CXXOBJ) $(COBJ)
--		 $(CXX) -o $@ $(LDFLAGS) $(CXXOBJ) $(COBJ) $(LIBS)
-+		 $(CXX) -o $@ \
-+			 -install_name $(libdir)/nx/$@ \
-+			 -compatibility_version $(LIBVERSION) \
-+			 -current_version $(LIBVERSION) \
-+			 $(LDFLAGS) $(CXXOBJ) $(COBJ) $(LIBS)
- 
- $(LIBLOAD):	 $(LIBFULL)
- 		 rm -f $(LIBLOAD)
-@@ -277,9 +281,9 @@
- 	./mkinstalldirs $(DESTDIR)${libdir}/nx
- 	./mkinstalldirs $(DESTDIR)${includedir}/nx
- 	$(INSTALL_DATA) $(LIBFULL)              $(DESTDIR)${libdir}/nx
--	$(INSTALL_LINK) libXcomp.so.3           $(DESTDIR)${libdir}/nx
--	$(INSTALL_LINK) libXcomp.so             $(DESTDIR)${libdir}/nx
--	$(INSTALL_DATA) libXcomp.a              $(DESTDIR)${libdir}/nx
-+	$(INSTALL_LINK) $(LIBLOAD)              $(DESTDIR)${libdir}/nx
-+	$(INSTALL_LINK) $(LIBSHARED)            $(DESTDIR)${libdir}/nx
-+	$(INSTALL_DATA) $(LIBARCHIVE)           $(DESTDIR)${libdir}/nx
- 	$(INSTALL_DATA) NX*.h                   $(DESTDIR)${includedir}/nx
- 	$(INSTALL_DATA) MD5.h                   $(DESTDIR)${includedir}/nx
- 	echo "Running ldconfig tool, this may take a while..." && ldconfig || true
-@@ -292,9 +296,9 @@
- 
- uninstall.lib:
- 	$(RM_FILE) $(DESTDIR)${libdir}/nx/$(LIBFULL)
--	$(RM_FILE) $(DESTDIR)${libdir}/nx/libXcomp.so.3
--	$(RM_FILE) $(DESTDIR)${libdir}/nx/libXcomp.so
--	$(RM_FILE) $(DESTDIR)${libdir}/nx/libXcomp.a
-+	$(RM_FILE) $(DESTDIR)${libdir}/nx/$(LIBLOAD)
-+	$(RM_FILE) $(DESTDIR)${libdir}/nx/$(LIBSHARED)
-+	$(RM_FILE) $(DESTDIR)${libdir}/nx/$(LIBARCHIVE)
- 	$(RM_FILE) $(DESTDIR)${includedir}/nx/NXalert.h
- 	$(RM_FILE) $(DESTDIR)${includedir}/nx/NX.h
- 	$(RM_FILE) $(DESTDIR)${includedir}/nx/NXmitshm.h
---- a/nxcomp/configure.in
-+++ b/nxcomp/configure.in
-@@ -187,7 +187,7 @@
- dnl the options -G -h.
- 
- if test "$DARWIN" = yes; then
--  LDFLAGS="$LDFLAGS -bundle"
-+  LDFLAGS="$LDFLAGS -dynamiclib"
- elif test "$SUN" = yes; then
-   LDFLAGS="$LDFLAGS -G -h \$(LIBLOAD)"
- else
---- a/nxproxy/Makefile.in
-+++ b/nxproxy/Makefile.in
-@@ -15,11 +15,11 @@
-            -Wall -Wpointer-arith -Wstrict-prototypes -Wmissing-prototypes \
-            -Wmissing-declarations -Wnested-externs
- 
--CXXINCLUDES = -I. -I../nxcomp
-+CXXINCLUDES = -I. -I@prefix@/include/nx
- 
- CC         = @CC@
- CCFLAGS    = $(CXXFLAGS)
--CCINCLUDES = -I. -I../nxcomp
-+CCINCLUDES = -I. -I@prefix@/include/nx
- CCDEFINES  =
- 
- LDFLAGS = @LDFLAGS@
---- a/nxproxy/configure.in
-+++ b/nxproxy/configure.in
-@@ -161,7 +161,7 @@
- if test "$CYGWIN32" = yes; then
-     LIBS="$LIBS -L../nxcomp -lXcomp -lstdc++ -Wl,-e,_mainCRTStartup -ljpeg -lpng -lz"
- else
--    LIBS="$LIBS -L../nxcomp -lXcomp"
-+    LIBS="$LIBS -lXcomp"
- fi
- 
- dnl Find makedepend somewhere.
 Description: In Types.h, don't use STL internals on libc++.
 Author: Clemens Lang <cal@macports.org>
 Abstract:
