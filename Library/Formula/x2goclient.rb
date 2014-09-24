@@ -34,14 +34,4 @@ class X2goclient < Formula
     # Symlink in the command-line version
     bin.install_symlink prefix/"#{name}.app/Contents/MacOS/#{name}"
   end
-
-  def caveats; <<-EOS
-    #{name}.app was installed in:
-    #{prefix}
-    To symlink into ~/Applications, you can do:
-      brew linkapps
-    or
-      sudo ln -s #{prefix}/#{name}.app /Applications
-    EOS
-  end
 end
