@@ -1,37 +1,37 @@
 require "formula"
 
 class Bitcoin < Formula
-  homepage "http://bitcoin.org/"
-  url "https://github.com/bitcoin/bitcoin/archive/v0.9.2.1.tar.gz"
-  version "0.9.2.1"
-  head "https://github.com/bitcoin/bitcoin.git", :branch => "master"
-  sha1 "cb7b322a84ce19dc76fa240d45764f7cd73ee7fe"
+  homepage 'http://bitcoin.org/'
+  version '0.9.3'
+  url "https://github.com/bitcoin/bitcoin/archive/v#{version}.tar.gz"
+  head 'https://github.com/bitcoin/bitcoin.git', :branch => "master"
+  sha1 'bbfb311c3e02b37aba71385d2d369450a88a601e'
 
-  option "without-upnp", "Disable uPNP port forwarding"
-  option "without-qrc", "Disable QR codes"
-  option "without-qt", "Disable Qt GUI codes"
+  option 'without-upnp', 'Disable uPNP port forwarding'
+  option 'without-qrc', 'Disable QR codes'
+  option 'without-qt', 'Disable Qt GUI codes'
 
-  depends_on "automake"
-  depends_on "berkeley-db4"
-  depends_on "boost"
-  depends_on "miniupnpc" if not build.include? "without-upnp"
-  depends_on "openssl"
-  depends_on "pkg-config"
-  depends_on "protobuf"
-  depends_on "qrencode" if not build.include? "without-qrc"
-  depends_on "qt" if not build.include? "without-qt"
+  depends_on 'automake'
+  depends_on 'berkeley-db4'
+  depends_on 'boost'
+  depends_on 'miniupnpc' if not build.include? 'without-upnp'
+  depends_on 'openssl'
+  depends_on 'pkg-config'
+  depends_on 'protobuf'
+  depends_on 'qrencode' if not build.include? 'without-qrc'
+  depends_on 'qt' if not build.include? 'without-qt'
 
   def install
-    system "sh", "autogen.sh"
-    system "./configure", "--prefix=#{prefix}"
-    system "make"
-    system "strip src/bitcoin-cli"
-    system "strip src/bitcoind"
-    bin.install "src/bitcoin-cli"
-    bin.install "src/bitcoind"
+    system './autogen.sh'
+    system './configure', "--prefix=#{prefix}"
+    system 'make'
+    system 'strip src/bitcoin-cli'
+    system 'strip src/bitcoind'
+    bin.install 'src/bitcoin-cli'
+    bin.install 'src/bitcoind'
 
-    system "make", "appbundle"
-    prefix.install "Bitcoin-Qt.app"
+    system 'make', 'appbundle'
+    prefix.install 'Bitcoin-Qt.app'
   end
 
   def plist; <<-EOS.undent
