@@ -8,7 +8,6 @@ class Keepassx2 < Formula
   depends_on 'cmake'
   depends_on 'qt'
   depends_on 'libgcrypt'
-  depends_on 'zlib'
 
   def install
     mkdir 'build' do
