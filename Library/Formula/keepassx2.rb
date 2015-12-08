@@ -1,19 +1,23 @@
 require 'formula'
 
-class Keepassx2 < Formula
+class Keepassx < Formula
   homepage 'http://www.keepassx.org'
-  url 'https://github.com/keepassx/keepassx/archive/2.0-alpha6.tar.gz'
-  sha1 'dc6054d9964c735236de6902b2aede3619ee04b9'
+  url "https://github.com/eugenesan/keepassx.git", :branch => "2.0-http-totp"
+  version "2.0-http-totp"
+  head "https://github.com/eugenesan/keepassx.git", :branch => "master"
 
   depends_on 'cmake'
   depends_on 'qt'
   depends_on 'libgcrypt'
+  depends_on 'libmicrohttpd'
+  depends_on 'qjson'
+  depends_on 'oath-toolkit'
 
   def install
     mkdir 'build' do
       system 'cmake', '..', *std_cmake_args
 
-      # Do no deploy redundent Qt libs (we do no use .dmg bundle and the proccess is broken anyway)
+      # Do no deploy redundent Qt libs (we do not attempt .dmg bundle since the proccess is broken)
       inreplace 'src/cmake_install.cmake', 'FIXUP_QT4_EXECUTABLE', '#FIXUP_QT4_EXECUTABLE'
 
       system 'make', 'install'
