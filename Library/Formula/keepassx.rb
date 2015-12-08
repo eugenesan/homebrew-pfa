@@ -2,17 +2,25 @@ require 'formula'
 
 class Keepassx < Formula
   homepage 'http://www.keepassx.org'
-  url 'http://www.keepassx.org/releases/keepassx-0.4.3.tar.gz'
-  sha1 'd25ecc9d3caaa5a6d0f39a42c730a95997f37e2e'
+  url "https://github.com/eugenesan/keepassx.git", :branch => "2.0-http-totp"
+  version "2.0-http-totp"
+  head "https://github.com/eugenesan/keepassx.git", :branch => "master"
 
+  depends_on 'cmake'
   depends_on 'qt'
+  depends_on 'libgcrypt'
+  depends_on 'libmicrohttpd'
+  depends_on 'qjson'
+  depends_on 'oath-toolkit'
 
   def install
-    # Fix build on OSX 10.9
-    inreplace "src/lib/random.cpp", "#include \"random.h\"", "#include \"random.h\"\n#include <unistd.h>"
+    mkdir 'build' do
+      system 'cmake', '..', *std_cmake_args
 
-    # Simple Qt4 build
-    system "qmake", "CONFIG-=app_bundle", "PREFIX=#{prefix}"
-    system "make", "install"
+      # Do no deploy redundent Qt libs (we do not attempt .dmg bundle since the proccess is broken)
+      inreplace 'src/cmake_install.cmake', 'FIXUP_QT4_EXECUTABLE', '#FIXUP_QT4_EXECUTABLE'
+
+      system 'make', 'install'
+    end
   end
 end
