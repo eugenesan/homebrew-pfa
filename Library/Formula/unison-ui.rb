@@ -2,8 +2,8 @@ require 'formula'
 
 class UnisonUi < Formula
   homepage 'http://www.cis.upenn.edu/~bcpierce/unison/'
-  url 'http://www.seas.upenn.edu/~bcpierce/unison//download/releases/unison-2.45.28/unison-2.45.28.tar.gz'
-  sha1 '3f2a1f1cf837cd39182f1c7807954fea7c146974'
+  url "https://www.seas.upenn.edu/~bcpierce/unison//download/releases/stable/unison-2.48.3.tar.gz"
+  sha256 "f40d3cfbe82078d79328b51acab3e5179f844135260c2f4710525b9b45b15483"
 
   depends_on :xcode
   depends_on 'objective-caml'
